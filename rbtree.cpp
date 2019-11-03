@@ -26,7 +26,8 @@ Node<KeyType>* newNode(KeyType key)
 	node->parent = NULL;
 	node->left = NULL;
 	node->right = NULL;
-	node->key = key;															//Sets the node key to the key parameter
+	node->key = key;		//Sets the node key to the key parameter
+	node->color = RED;
 
 	return node;
 }
@@ -239,6 +240,30 @@ Node<KeyType>* rbtree<KeyType>::recursiveRemove(Node<KeyType>* subtreeRoot, KeyT
 	}
 
 	return subtreeRoot;
+}
+
+
+// =========================== Right Rotate Method ========-====================
+template <class KeyType>
+void rbtree<KeyType>::rightRotate()
+{
+
+}
+
+
+// =========================== Left Rotate Method ==============================
+template <class KeyType>
+void rbtree<KeyType>::leftRotate()
+{
+
+}
+
+
+// ============================= Fix Color Method ==============================
+template <class KeyType>
+void rbtree<KeyType>::fixColor()
+{
+
 }
 
 

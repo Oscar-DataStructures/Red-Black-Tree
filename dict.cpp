@@ -12,118 +12,83 @@ Project 7
 
 using namespace std;
 
-// Pair struct
-// template <class KeyType1, class KeyType2>
-// struct Pair
-// {
-// 	KeyType1 key;
-// 	KeyType2 value;
-//
-//
-// };
+
 
 // ================================= Constructor ===============================
-template <class KeyType1, class KeyType2>
-Dictionary<KeyType1, KeyType2>::Dictionary() : hashtable<Pair>(DEFAULT_SIZE)
+template <class KeyType>
+Dictionary<KeyType>::Dictionary() : rbtree<KeyType>()
 //Preconditions:  N/A
-//Postcondition:  Inherits hashtable constructor
+//Postcondition:  Inherits rbtree constructor
 {
 
 }
 
 
 // =============================== Copy Constructor ============================
-template <class KeyType1, class KeyType2>
-Dictionary<KeyType1, KeyType2>::Dictionary(const Dictionary<KeyType1, KeyType2>& dict) : hashtable<Pair>(dict)
+template <class KeyType>
+Dictionary<KeyType>::Dictionary(const Dictionary<KeyType>& dict) : rbtree<KeyType>(dict)
 //Preconditions:    N/A
-//Postcondition:    Inherits hashtable copy constructor
+//Postcondition:    Inherits rbtree copy constructor
 {
 
 }
 
 
 // ================================= Empty Method ==============================
-template <class KeyType1, class KeyType2>
-bool Dictionary<KeyType1, KeyType2>::empty() const
+template <class KeyType>
+bool Dictionary<KeyType>::empty() const
 //Preconditions:  Tree must exist
-//Postcondition:  Returns whether or not dict is empty
+//Postcondition:  Inherits rbtree empty method to return whether the dict is empty
 {
-  return count == 0;
+  return rbtree<KeyType>::empty();     //rbtree inheritance
 }
 
 
 // ================================= Get Method ================================
-template <class KeyType1, class KeyType2>
-Pair* Dictionary<KeyType1, KeyType2>::get(const KeyType1& k) const
+template <class KeyType>
+KeyType* Dictionary<KeyType>::get(const KeyType& k) const
 //Preconditions:    Tree must exist
-//Postcondition:    Returns key of dict or throws KeyError if not found
+//Postcondition:    Inherits rbtree helpGet method to return key of dict or null if not found
 {
-  Pair* p = new Pair;
-  p->key = k;
-  int hSlots = p->hash(slots);
-  Pair pSet(*p);
-  Pair* pPtr = &pSet;
-  int result = table[hSlots].index(*p);
-  if (result == -1)
+  Node<KeyType>* output = rbtree<KeyType>::helpGet(k);     //rbtree inheritance
+  if (output != NULL)
   {
-    throw KeyError();
+    return &(output->key);
   }
 
   else
   {
-    Node<Pair>* current = table[hSlots].head;
-    for(int i = 0; i < table->size; i++)
-    {
-      if (pPtr == current->data)
-      {
-        return pPtr;
-      }
-      else current = current->next;
-    }
+    return NULL;
   }
 }
 
 
 // ================================ Insert Method ==============================
-template <class KeyType1, class KeyType2>
-void Dictionary<KeyType1, KeyType2>::insert(KeyType1 k, KeyType2 v)
+template <class KeyType>
+void Dictionary<KeyType>::insert(KeyType k)
 // PreConditions:   N/A
-// PostConditions:  Inserts pair into dict if its key isn't already in the dict
+// PostConditions:  Inherits rbtree insert method to insert into dict value k
 {
- try   // if a KeyError is received, that means k is not yet in the dict so we can add it
- {
-    Pair* exists = new Pair;
-    exists = get(k);
- }
+  Node<KeyType>* exists = rbtree<KeyType>::helpGet(k);
 
-  catch(KeyError e)   // add it
+  if (exists == NULL)
   {
-    Pair* p = new Pair;
-    p->key = k;
-    p->value = v;
-    int hSlots = p->hash(slots);
-    //Pair* pPtr = &p;
-    table[hSlots].headAppend(p);
-    count++;
-    return;
-
+    rbtree<KeyType>::insert(k);      //rbtree inheritance
   }
-  throw InsertError();             //KeyError caught
+
+  else
+  {
+    throw KeyError();             //KeyError caught
+  }
+
 }
 
 
 // ================================ Remove Method ==============================
-template <class KeyType1, class KeyType2>
-void Dictionary<KeyType1, KeyType2>::remove(const KeyType1& k)
+template <class KeyType>
+void Dictionary<KeyType>::remove(const KeyType& k)
 //Preconditions:  Tree must exist
-//Postcondition:  Removes pair with key k from dictionary (if it's in there)
+//Postcondition:  Inherits remove method from rbtree to remove value k from dict
 {
-  Pair* p = new Pair;
-  p->key = k;
-  p->value = "";
-
-  int hSlots = p->hash(slots);
-
-  table[hSlots].remove(*p);
-  count--;
+  rbtree<KeyType>::remove(k);      //rbtree inheritance
 }
