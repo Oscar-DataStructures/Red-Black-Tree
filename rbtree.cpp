@@ -171,7 +171,7 @@ void rbtree<KeyType>::insert(KeyType k)
 	}
 }
 
-
+//test string
 
 // ================================ Remove Method ==============================
 template <class KeyType>
