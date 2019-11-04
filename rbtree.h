@@ -44,17 +44,17 @@ class rbtree
 		rbtree(const rbtree<KeyType>& tree);		//copy constructor
 		bool empty() const;		// return true if empty; false o/w
 
-		KeyType* get(KeyType k) const;		// return first item with key equal to k
+		KeyType get(KeyType k) const;		// return first item with key equal to k
 
 		void insert(KeyType k);		// insert k into the tree
 		void remove(KeyType k);		// delete first item with key equal to k
 		rbtree<KeyType>& deepCopy(Node<KeyType>* subtreeRoot);		// copy method for = operator and copy constructor
 
-		KeyType* maximum() const;		// return the maximum item
-		KeyType* minimum()const ;		// return the minimum item
+		KeyType maximum() const;		// return the maximum item
+		KeyType minimum()const ;		// return the minimum item
 
-		KeyType* successor(const KeyType& k) const;		// return the successor of k
-		KeyType* predecessor(const KeyType& k) const;		// return the predecessor of k
+		KeyType successor(const KeyType& k);		// return the successor of k
+		KeyType predecessor(const KeyType& k) const;		// return the predecessor of k
 
 		rbtree<KeyType>& operator=(const rbtree<KeyType>& tree);		// assignment operator
 
@@ -64,8 +64,7 @@ class rbtree
 
 	protected:
 		void clearNodes();
-		Node<KeyType>* helpGet(KeyType k) const;
-		Node<KeyType>* recursiveRemove(Node<KeyType>* root, KeyType k);
+		Node<KeyType>* recursiveRemove(Node<KeyType>* subRoot, KeyType k);
 
 		void rightRotate();
 		void leftRotate();
@@ -84,9 +83,13 @@ class rbtree
 
 	private:
 		Node<KeyType>* root;
+		Node<KeyType>* tmpRoot;		//used when we need to assign root but dont want to change the root
 };
 
 class KeyError{};
+class EmptyError{};
+class SuccessorError{};
+class PredecessorError{};
 
 #include "rbtree.cpp"
 

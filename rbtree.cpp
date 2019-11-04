@@ -40,6 +40,7 @@ rbtree<KeyType>::rbtree()
 // PostConditions:	Sets the private member root to NULL
 {
   this->root = NULL;
+	this->tmpRoot = root;
 }
 
 
@@ -84,6 +85,7 @@ rbtree<KeyType>::rbtree(const rbtree<KeyType>& tree)
 // PostConditions:	Current tree will be a copy of tree
 {
   this->root = NULL;
+	this->tmpRoot = root;
   deepCopy(tree.root);
 }
 
@@ -98,28 +100,13 @@ bool rbtree<KeyType>::empty() const
 }
 
 
-// ================================= Get Method ================================
+// ============================== Get Method ==============================
 template <class KeyType>
-KeyType* rbtree<KeyType>::get(KeyType k) const
-// PreConditions: 	Tree must exist and not be empty
-// PostConditions:  Return first item in rbtree that has key k
-{
-	// cout << "Value: " << helpGet(k) << endl;
-	// cout << "Pointer: " << this->helpGet(k) << endl;
-	if (this->helpGet(k) == NULL)
-		throw KeyError();
-
-	return &(helpGet(k)->key);
-}
-
-
-// ============================== Help Get Method ==============================
-template <class KeyType>
-Node<KeyType>* rbtree<KeyType>::helpGet(KeyType k) const
+KeyType rbtree<KeyType>::get(KeyType k) const
 // PreConditions:		Tree must exist and not be empty
 // PostConditions:	Returns the node that has the value k
 {
-	Node<KeyType> *tmp = root;
+	Node<KeyType> *tmp = tmpRoot;
 	while (tmp != NULL && tmp->key != k)
 	{
 		if (k < tmp->key)
@@ -130,10 +117,10 @@ Node<KeyType>* rbtree<KeyType>::helpGet(KeyType k) const
 	}
 
 	if (tmp == NULL)							//Empty Tree
-		return NULL;
+		throw KeyError();
 
-	else
-		return tmp;
+	cout << "HERE" << endl;
+	return (tmp->key);
 }
 
 
@@ -156,7 +143,10 @@ void rbtree<KeyType>::insert(KeyType k)
   }
 
   if (y == NULL)								//If no nodes are in tree
-    root = z;
+  {
+		root = z;
+		tmpRoot = root;
+	}
 
 	else if (z->key < y->key)
 	{
@@ -171,7 +161,7 @@ void rbtree<KeyType>::insert(KeyType k)
 	}
 }
 
-//test string
+
 
 // ================================ Remove Method ==============================
 template <class KeyType>
@@ -181,6 +171,7 @@ void rbtree<KeyType>::remove(KeyType k)
 {
   Node<KeyType>* newRoot = recursiveRemove(root, k);
 	root = newRoot;							//restructures root
+	tmpRoot = root;
 }
 
 
@@ -188,61 +179,60 @@ void rbtree<KeyType>::remove(KeyType k)
 
 // ============================= Remove Recursive Method =======================
 template <class KeyType>
-Node<KeyType>* rbtree<KeyType>::recursiveRemove(Node<KeyType>* subtreeRoot, KeyType k)
+Node<KeyType>* rbtree<KeyType>::recursiveRemove(Node<KeyType>* subRoot, KeyType k)
 // PreConditions:		Tree cannot be empty and key must be in rbtree
 // PostConditions:  Return new keytype node pointer subtree with node with value k removed
 {
-	if (this->helpGet(k) == NULL)
-		throw KeyError();
+	this->get(k);		//get will do a KeyError check
 
-  if (subtreeRoot == NULL)
+  if (subRoot == NULL)
 	{
-    return subtreeRoot; 							//ends the function since there is nothing to remove
+    return subRoot; 							//ends the function since there is nothing to remove
 	}
 
-  if (k < subtreeRoot->key)						//Left tree traversal
+  if (k < subRoot->key)						//Left tree traversal
 	{
-		Node<KeyType>* nodeToAttach = recursiveRemove(subtreeRoot->left, k);
-    subtreeRoot->left = nodeToAttach;
-		nodeToAttach->parent = subtreeRoot;
+		Node<KeyType>* nodeToAttach = recursiveRemove(subRoot->left, k);
+    subRoot->left = nodeToAttach;
+		nodeToAttach->parent = subRoot;
   }
 
-	else if (k > subtreeRoot->key)			//Right tree traversal
+	else if (k > subRoot->key)			//Right tree traversal
 	{
-		Node<KeyType>* nodeToAttach = recursiveRemove(subtreeRoot->right, k);
-		subtreeRoot->right = nodeToAttach;
-		nodeToAttach->parent = subtreeRoot;
+		Node<KeyType>* nodeToAttach = recursiveRemove(subRoot->right, k);
+		subRoot->right = nodeToAttach;
+		nodeToAttach->parent = subRoot;
 	}
 
-	else if (k == subtreeRoot->key)		// for the else portion I looked at https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ for refrence
+	else if (k == subRoot->key)		// for the else portion I looked at https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ for refrence
 	{
-		if (subtreeRoot->left == NULL && subtreeRoot->right == NULL) //if root has no children
+		if (subRoot->left == NULL && subRoot->right == NULL) //if root has no children
 		{
-			delete subtreeRoot;
+			delete subRoot;
 			return NULL;
 		}
 
-		else if(subtreeRoot->left == NULL) 								//if no left child
+		else if(subRoot->left == NULL) 								//if no left child
 		{
-			Node<KeyType>* tmp = subtreeRoot->right; 				//make the right child root
-			delete subtreeRoot;
+			Node<KeyType>* tmp = subRoot->right; 				//make the right child subRoot
+			delete subRoot;
 			return tmp;
 		}
 
-		else if(subtreeRoot->right == NULL) 							//if no right child
+		else if(subRoot->right == NULL) 							//if no right child
 		{
 
-			Node<KeyType>* tmp = subtreeRoot->left; 				//make the left child root
-			delete subtreeRoot;
+			Node<KeyType>* tmp = subRoot->left; 				//make the left child root
+			delete subRoot;
 			return tmp;
 		}
 
-		Node<KeyType>* tmp = successorNode(subtreeRoot->key); // get the successor whose value will become new root
-		subtreeRoot->key = tmp->key;
-		subtreeRoot->right = recursiveRemove(subtreeRoot->right, tmp->key);
+		Node<KeyType>* tmp = newNode(successor(subRoot->key)); // get the successor whose value will become new root
+		subRoot->key = tmp->key;
+		subRoot->right = recursiveRemove(subRoot->right, tmp->key);
 	}
 
-	return subtreeRoot;
+	return subRoot;
 }
 
 
@@ -288,23 +278,19 @@ rbtree<KeyType>& rbtree<KeyType>::deepCopy(Node<KeyType>* subtreeRoot)
 }
 
 
-// ================================== Max Method ===============================
-template <class KeyType>
-KeyType* rbtree<KeyType>::maximum() const
-// PreConditions: 	Root cannot be null
-// PostConditions:  Return max item
-{
-	return helpMax(root);
-}
 
-
-// ============================== Max Helper Method ============================
+// ================================= Max Method ================================
 template <class KeyType>
-KeyType* rbtree<KeyType>::helpMax(Node<KeyType>* subtreeRoot) const
+KeyType rbtree<KeyType>::maximum() const
 // PreConditions: 	Root cannot be null
 // PostConditions:  Return min item
 {
-	Node<KeyType>* tmp = subtreeRoot; //this way we dont change the root pointer
+	if (root == NULL)
+	{
+		throw EmptyError();
+	}
+
+	Node<KeyType>* tmp = tmpRoot; //this way we dont change the root pointer
   if (tmp != NULL)
     {
       while (tmp->right != NULL)		//Right tree traversal
@@ -312,35 +298,38 @@ KeyType* rbtree<KeyType>::helpMax(Node<KeyType>* subtreeRoot) const
         tmp = tmp->right;
       }
 
-      return &(tmp->key);
+      return (tmp->key);
     }
-
-  return NULL;
 }
 
 
-// ================================= Min Method ================================
-template <class KeyType>
-KeyType* rbtree<KeyType>::minimum() const
-// PreConditions: 	Root cannot be null
-// PostConditions:  Return min item
-{
-	Node<KeyType> *result = helpMin(root);
-	if (result != NULL)
-		return &(result->key);
-
-	else
-		return NULL;
-}
-
+// // ================================= Min Method ================================
+// template <class KeyType>
+// KeyType* rbtree<KeyType>::minimum() const
+// // PreConditions: 	Root cannot be null
+// // PostConditions:  Return min item
+// {
+// 	Node<KeyType> *result = helpMin(root);
+// 	if (result != NULL)
+// 		return &(result->key);
+//
+// 	else
+// 		return NULL;
+// }
+//
 
 // ============================== Min Helper Method ============================
 template <class KeyType>
-Node<KeyType>* rbtree<KeyType>::helpMin(Node<KeyType>* subtreeRoot) const
+KeyType rbtree<KeyType>::minimum() const
 // PreConditions: 	Root cannot be null
 // PostConditions:  Return min item
 {
-	Node<KeyType>* tmp = subtreeRoot; //this way we dont change the root pointer
+	if (root == NULL)
+	{
+		throw EmptyError();
+	}
+
+	Node<KeyType>* tmp = tmpRoot; //this way we dont change the root pointer
   if (tmp != NULL)
     {
       while (tmp->left != NULL)			//Left tree traversal
@@ -348,50 +337,52 @@ Node<KeyType>* rbtree<KeyType>::helpMin(Node<KeyType>* subtreeRoot) const
         tmp = tmp->left;
       }
 
-      return tmp;
+      return (tmp->key);
     }
-
-  return NULL;
 }
 
 
-// ============================= Successor Method ==============================
-template <class KeyType>
-KeyType* rbtree<KeyType>::successor(const KeyType& k) const
-// PreConditions: 	Root cannot be null
-// PostConditions:  Return successor of k
-{
-  Node<KeyType> *result = successorNode(k);
-
-	if (result != NULL)
-	{
-		return &(result->key);
-	}
-
-	else
-	{
-		return NULL;
-	}
-}
+// // ============================= Successor Method ==============================
+// template <class KeyType>
+// KeyType* rbtree<KeyType>::successor(const KeyType& k) const
+// // PreConditions: 	Root cannot be null
+// // PostConditions:  Return successor of k
+// {
+//   Node<KeyType> *result = successorNode(k);
+//
+// 	if (result != NULL)
+// 	{
+// 		return &(result->key);
+// 	}
+//
+// 	else
+// 	{
+// 		return NULL;
+// 	}
+// }
 
 
 // =========================== SuccessorNode Method ============================
 template <class KeyType>
-Node<KeyType>* rbtree<KeyType>::successorNode(const KeyType& k) const
+KeyType rbtree<KeyType>::successor(const KeyType& k)
 // PreConditions: 	Root cannot be null
 // PostConditions:  Return successor of k
 {
-	if (this->helpGet(k) == NULL)
-		throw KeyError();
+	if (root == NULL)
+	{
+		throw EmptyError();
+	}
 
-  Node<KeyType>* tmp = helpGet(k); 				//this way we dont change the root pointer
+	this->get(k);		//get will do a KeyError check
+  Node<KeyType>* tmp = newNode(get(k)); 				//this way we dont change the root pointer
   if (tmp != NULL)
   {
     Node<KeyType>* y;
     if (tmp->right != NULL)
     {
       tmp = tmp->right; 									//min of right subtree most immediate successor
-      return helpMin(tmp);
+			tmpRoot = tmp;
+			return minimum();
     }
 
     y = tmp->parent;
@@ -400,31 +391,37 @@ Node<KeyType>* rbtree<KeyType>::successorNode(const KeyType& k) const
       tmp = y;
       y = tmp->parent;
     }
-
-    return y;
+		cout << "This Get" << endl;
+    return get(y->key);
   }
 
-	return NULL;
+	else if (tmp->parent == NULL)
+	{
+		cout << "k has no successor" << endl;
+		throw SuccessorError();
+	}
+
+
 }
 
 
 // ============================ Predecessor Method =============================
 template <class KeyType>
-KeyType* rbtree<KeyType>::predecessor(const KeyType& k) const
+KeyType rbtree<KeyType>::predecessor(const KeyType& k) const
 // PreConditions: 	Root cannot be null
 // PostConditions:  Return predecessor of k
 {
-	if (this->helpGet(k) == NULL)
-		throw KeyError();
+	this->get(k);		//get will do a KeyError check
 
-  Node<KeyType>* tmp = helpGet(k);		 //this way we dont change the root pointer
+  Node<KeyType>* tmp = newNode(get(k));		 //this way we dont change the root pointer
   if (tmp != NULL)
   {
     Node<KeyType>* y;
     if (tmp->left != NULL)
     {
       tmp = tmp->left; 									//max of right subtree will be most immediate predecessor
-      return helpMax(tmp);
+			tmpRoot = root;
+			return maximum();
     }
 
     y = tmp->parent;
@@ -434,9 +431,14 @@ KeyType* rbtree<KeyType>::predecessor(const KeyType& k) const
       tmp = y;
       y = tmp->parent;
     }
-    return &(y->key);
+    return get(y->key);
   }
-	return NULL;
+
+	else if (tmp->left == NULL)
+	{
+		cout << "k has no predecessor" << endl;
+		throw PredecessorError();
+	}
 }
 
 
