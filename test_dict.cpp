@@ -11,107 +11,231 @@ Project 7
 #include <cassert>
 #include "dict.h"
 
-// ======================= Test Default Constructor Method =====================
-void test_defaultConstructor()
+
+struct KVPair
 {
-	// Dictionary<string, string> d1;
-	// assert(d1.toString(0) == "[]" && d1.empty()); // empty is also tested here
-}
+	string key;
+	string value;
+};
+
+// ============================= Operator Overloading ==========================
+ostream& operator<<(ostream& os, const KVPair& dt)
+	{
+		return os << dt.key;
+	}
+
+bool operator< (const KVPair &kv1, const KVPair &kv2)
+	{
+		return kv1.key < kv2.key;
+	}
+
+bool operator> (const KVPair &kv1, const KVPair &kv2)
+	{
+		return kv1.key > kv2.key;
+	}
+
+bool operator!= (const KVPair &kv1, const KVPair &kv2)
+	{
+		return kv1.key != kv2.key;
+	}
+
+bool operator== (const KVPair &kv1, const KVPair &kv2)
+	{
+		return kv1.key == kv2.key;
+	}
 
 
-// ========================= Test Copy Constructor Method ======================
-void test_copyConstructor()
-{
-	// Dictionary<string, string> d1;
-	// d1.insert("hi", "1");					// insert was tested prior to writing this
-	//
-	// Pair p;
-	// p.key = "hi";
-	// int result = p.hash(d1.slots);
-	//
-	// Dictionary<string, string> d2(d1);
-	//
-	// assert(d2.toString(result) == d2.toString(result));
-}
-
-// ========================= Test Insert and Get Methods =======================
-void test_insert_and_get()
-{
-	// // note that get is used by insert so it's acceptable to test both using insert.
-	// Dictionary<string, string> dictA;
-	// dictA.insert("key", "value");
-	// Pair p;
-	// p.key = "key";
-	// p.value = "value";
-	// int result = p.hash(dictA.slots);
-	// assert(dictA.toString(result) == "[{key, value}]" && !dictA.empty()); // empty also tested here
-	//
-	// try{dictA.insert("key", "value");}	// shouldn't be able to do this -- it's already in there
-	// catch(InsertError e)
-	// {
-	// 	cout << "Insert Error: Item already exists in dictionary with that key" << endl;
-	// }
-	//
-	// dictA.insert("yek", "value");	// chaining
-	// assert(dictA.toString(result) == "[{yek, value}, {key, value}]");
-}
+	// ======================= Test Default Constructor Method =====================
+	void test_defaultConstructor()
+	{
+		Dictionary<KVPair> dictA;
+		assert(dictA.empty() == 1);
+	}
 
 
-// ============================= Test Remove Method ============================
-void test_remove()
-{
-	// Dictionary<string, string> dictA;
-	// dictA.insert("key", "value");
-	// dictA.insert("yek", "value");
-	//
-	// Pair p;
-	// p.key = "key";
-	// p.value = "value";
-	//
-	// int result = p.hash(dictA.slots);
-	//
-	// string str = "key";
-	// dictA.remove(str);
-	// assert(dictA.toString(result) == "[{yek, value}]");
-	// str = "yek";
-	// dictA.remove(str);
-	// assert(dictA.toString(result) == "[]");
-	//
-	// dictA.insert("asdf", "asdf");
-	// dictA.insert(";lkj", "23");
-	// dictA.insert("23", "23");
-	//
-	// p.key = "asdf";
-	// int result1 = p.hash(dictA.slots);
-	// p.key = ";lkj";
-	// int result2 = p.hash(dictA.slots);
-	// p.key = "23";
-	// int result3 = p.hash(dictA.slots);
-	// string str1 = "asdf";
-	// string str2 = ";lkj";
-	// string str3 = "23";
-	//
-	// dictA.remove(str1);
-	// assert(dictA.toString(result1) == "[]");
-	// dictA.remove(str2);
-	// assert(dictA.toString(result2) == "[]");
-	// dictA.remove(str3);
-	// assert(dictA.toString(result3) == "[]");
-}
+	// ========================= Test Copy Constructor Method ======================
+	void test_copyConstructor()
+	{
+		Dictionary<KVPair> dictA;
+
+		KVPair pair1;
+		pair1.key = "apple";
+		pair1.value = "yum";
+		dictA.insert(pair1);
+
+		KVPair pair2;
+		pair2.key = "banana";
+		pair2.value = "yummy";
+		dictA.insert(pair2);
+
+		Dictionary<KVPair> dictCopy(dictA);
+
+		KVPair getObj;
+		getObj.key = "apple";
+		assert(dictA.get(getObj)->value == "yum");
+		assert(dictCopy.get(getObj)->value == "yum");
+
+		getObj.key = "banana";
+		assert(dictA.get(getObj)->value == "yummy");
+		assert(dictCopy.get(getObj)->value == "yummy");
+
+		KVPair pairA;
+		pairA.key = "onlyA";
+		pairA.value = "yeah";
+		dictA.insert(pairA);
+
+		getObj.key = "onlyA";
+		assert(dictA.get(getObj)->value == "yeah");
+		assert(dictCopy.get(getObj) == NULL);
+
+		KVPair pairCopy;
+		pairCopy.key = "onlyCopy";
+		pairCopy.value = "yeah";
+		dictCopy.insert(pairCopy);
+
+		getObj.key = "onlyCopy";
+		assert(dictCopy.get(getObj)->value == "yeah");
+		assert(dictA.get(getObj) == NULL);
+	}
 
 
-// ==================================== Main ===================================
-// =============================================================================
-int main()
-{
-	test_defaultConstructor();
-	cout << "Default Constructor Test		|Passed|" << endl;
-  test_copyConstructor();
-	cout << "Copy Constructor Test			|Passed|" << endl;
-	test_insert_and_get();
-	cout << "Insert and Get Test			|Passed|" << endl;
-	test_remove();
-	cout << "Remove Test				|Passed|" << endl;
+	// ============================= Test Empty Method =============================
+	void test_empty()
+	{
+		Dictionary<KVPair> dictA;
+		assert(dictA.empty() == 1);
 
-	return 0;
-}
+		KVPair pair1;
+		pair1.key = "apple";
+		pair1.value = "yum";
+		dictA.insert(pair1);
+
+		assert(dictA.empty() == 0);
+	}
+
+	// ========================= Test Insert and Get Methods =======================
+	void test_insert_and_get()
+	{
+		Dictionary<KVPair> dictA;
+
+		KVPair pair1;
+		pair1.key = "apple";
+		pair1.value = "yum";
+		dictA.insert(pair1);
+
+		KVPair pair2;
+		pair2.key = "banana";
+		pair2.value = "yummy";
+		dictA.insert(pair2);
+
+		KVPair pair3;
+		pair3.key = "aardvark";
+		pair3.value = "eww";
+		dictA.insert(pair3);
+
+		KVPair pair4;
+		pair4.key = "garbage";
+		pair4.value = "notFood";
+		dictA.insert(pair4);
+
+		// Now, test if we can find the values that were just inserted.
+		KVPair get1;
+		get1.key = "apple";
+		assert(dictA.get(get1)->value == "yum");
+
+		KVPair get4;
+		get4.key = "garbage";
+		assert(dictA.get(get4)->value == "notFood");
+
+		KVPair get3;
+		get3.key = "aardvark";
+		assert(dictA.get(get3)->value == "eww");
+
+		KVPair get2;
+		get2.key = "banana";
+		assert(dictA.get(get2)->value == "yummy");
+
+		// Test checking a key that's not in the Dictionary.
+		KVPair getInvalid;
+		getInvalid.key = "asdfasf";
+		assert(dictA.get(getInvalid) == NULL);
+	}
+
+
+	// ============================= Test Remove Method ============================
+	void test_remove()
+	{
+		Dictionary<KVPair> dictA;
+
+		KVPair pair1;
+		pair1.key = "apple";
+		pair1.value = "yum";
+		dictA.insert(pair1);
+
+		KVPair pair2;
+		pair2.key = "banana";
+		pair2.value = "yummy";
+		dictA.insert(pair2);
+
+		KVPair pair3;
+		pair3.key = "aardvark";
+		pair3.value = "eww";
+		dictA.insert(pair3);
+
+		KVPair getObj;
+		getObj.key = "apple";
+		assert(dictA.get(getObj)->value == "yum");
+		getObj.key = "banana";
+		assert(dictA.get(getObj)->value == "yummy");
+		getObj.key = "aardvark";
+		assert(dictA.get(getObj)->value == "eww");
+
+		getObj.key = "apple";
+		dictA.remove(getObj);
+
+		getObj.key = "apple";
+		assert(dictA.get(getObj) == NULL);
+		getObj.key = "banana";
+		assert(dictA.get(getObj)->value == "yummy");
+		getObj.key = "aardvark";
+		assert(dictA.get(getObj)->value == "eww");
+
+		getObj.key = "banana";
+		dictA.remove(getObj);
+
+		getObj.key = "apple";
+		assert(dictA.get(getObj) == NULL);
+		getObj.key = "banana";
+		assert(dictA.get(getObj) == NULL);
+		getObj.key = "aardvark";
+		assert(dictA.get(getObj)->value == "eww");
+
+		getObj.key = "aardvark";
+		dictA.remove(getObj);
+
+		getObj.key = "apple";
+		assert(dictA.get(getObj) == NULL);
+		getObj.key = "banana";
+		assert(dictA.get(getObj) == NULL);
+		getObj.key = "aardvark";
+		assert(dictA.get(getObj) == NULL);
+	}
+
+
+	// ==================================== Main ===================================
+	// =============================================================================
+	int main()
+	{
+		test_defaultConstructor();
+		cout << "Default Constructor Test		|Passed|" << endl;
+		test_copyConstructor();
+		cout << "Copy Constructor Test			|Passed|" << endl;
+		test_empty();
+		cout << "Empty Test				|Passed|" << endl;
+		test_insert_and_get();
+		cout << "Insert and Get Test			|Passed|" << endl;
+		test_remove();
+		cout << "Remove Test				|Passed|" << endl;
+
+		return 0;
+	}

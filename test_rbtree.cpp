@@ -16,6 +16,7 @@ void test_defaultConstructor()
 {
 	rbtree<int> a;
 	assert(a.empty() == 1);
+
 }
 
 
@@ -128,6 +129,7 @@ void test_remove()
 	// assert(a.inOrder() == "");
 	//
 	// // a.remove(1);	//uncomment to see KeyError
+
 }
 
 
@@ -183,6 +185,7 @@ void test_min()
 	// b.insert(9);
 	//
 	// assert(*(b.minimum()) == 3);
+
 }
 
 
@@ -222,6 +225,7 @@ void test_successor()
 	// assert(*(b.successor(13)) == 14);
 	//
 	// //b.successor(14); //uncomment to see KeyError
+
 }
 
 
@@ -261,6 +265,7 @@ void test_predecessor()
 	// assert(*(b.predecessor(14)) == 13);
 	//
 	// //b.predecessor(3); //uncomment to see KeyError
+
 }
 
 
@@ -285,6 +290,7 @@ void test_assignmentOP()
 	// b = a;
 	// assert(b.empty() == 0);
 	// assert(b.inOrder() == "1, 2, 3, 4");
+
 }
 
 
@@ -314,6 +320,7 @@ void test_inOrder()
 	// b.insert(9);
 	//
 	// assert(b.inOrder() == "3, 4, 7, 8, 9, 10, 12, 13, 14");
+
 }
 
 
@@ -343,6 +350,7 @@ void test_preOrder()
 	// b.insert(9);
 	//
 	// assert(b.preOrder() == "10, 7, 4, 3, 8, 9, 13, 12, 14");
+
 }
 
 
@@ -372,6 +380,7 @@ void test_postOrder()
 	// b.insert(9);
 	//
 	// assert(b.postOrder() == "3, 4, 9, 8, 7, 12, 14, 13, 10");
+
 }
 
 

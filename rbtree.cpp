@@ -137,13 +137,37 @@ Node<KeyType>* rbtree<KeyType>::helpGet(KeyType k) const
 }
 
 
+// ============================== Get Color Method ==============================
+template <class KeyType>
+bool rbtree<KeyType>::getColor(KeyType k)
+// PreConditions:		Tree must exist and not be empty
+// PostConditions:	Returns the node that has the value k
+{
+	Node<KeyType> *tmp = root;
+	while (tmp != NULL && tmp->key != k)
+	{
+		if (k < tmp->key)
+			tmp = tmp->left;					//Left tree traversal
+
+		else
+			tmp = tmp->right;					//Right tree traversal
+	}
+
+	if (tmp == NULL)							//Empty Tree
+		return NULL;
+
+	else
+		return (tmp->color);
+}
+
+
 // ================================ Insert Method ==============================
 template <class KeyType>
 void rbtree<KeyType>::insert(KeyType k)
 // PreConditions:		N/A
 // PostConditions:	Inserts a node containing k into the rbtree while maintaining the rbtree property
 {
-  Node<KeyType> *z = newNode(k);
+  Node<KeyType> *z = newNode(k);		//node to be inserted
   Node<KeyType> *x = root;
   Node<KeyType> *y = NULL;
   while (x != NULL)
@@ -169,6 +193,8 @@ void rbtree<KeyType>::insert(KeyType k)
     y->right = z;
 		z->parent = y;
 	}
+
+	fixColor(root, z);
 }
 
 
@@ -243,25 +269,65 @@ Node<KeyType>* rbtree<KeyType>::recursiveRemove(Node<KeyType>* subtreeRoot, KeyT
 }
 
 
-// =========================== Right Rotate Method ========-====================
+// =========================== Left Rotate Method ========-====================
 template <class KeyType>
-void rbtree<KeyType>::rightRotate()
+void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 {
+	Node<KeyType>* y = pivot->right;
+	pivot->right = y->left;
 
+	if (y->left != NULL)
+		y->parent = pivot;
+
+	y->parent = pivot->parent;
+
+	if (pivot->parent ==	NULL)
+		root = y;
+
+	else if (pivot == pivot->parent->left)
+		pivot->parent->left = y;
+
+	else
+		pivot->parent->right = y;
+
+	y->left = pivot;
+	pivot->parent = y;
 }
 
 
-// =========================== Left Rotate Method ==============================
+// =========================== Right Rotate Method ==============================
 template <class KeyType>
-void rbtree<KeyType>::leftRotate()
+void rbtree<KeyType>::rightRotate(Node<KeyType>* root, Node<KeyType>* pivot)
+// PreConditions:		N/A
+// PostConditions:
 {
+	Node<KeyType>* y = pivot->left;
+	pivot->left = y->right;
 
+	if (pivot->left != NULL)
+		pivot->left->parent = pivot;
+
+	y->parent = pivot->parent;
+
+	if (pivot->parent ==	NULL)
+		root = y;
+
+	else if (pivot == pivot->parent->left)
+		pivot->parent->left = y;
+
+	else
+		pivot->parent->right = y;
+
+	y->right = pivot;
+	pivot->parent = y;
 }
 
 
 // ============================= Fix Color Method ==============================
 template <class KeyType>
-void rbtree<KeyType>::fixColor()
+void rbtree<KeyType>::fixColor(Node<KeyType>* root, Node<KeyType>* inNode)
+// PreConditions:		N/A
+// PostConditions:
 {
 
 }

@@ -17,7 +17,7 @@ Project 7
 
 using namespace std;
 
-enum Color {RED, BLACK};
+enum Color {RED, BLACK};		//makes red = 1, 0 = black
 
 template <class KeyType>
 class Node
@@ -46,6 +46,8 @@ class rbtree
 
 		KeyType* get(KeyType k) const;		// return first item with key equal to k
 
+		bool getColor(KeyType k);		//gets the color of the first node with key equal to k
+
 		void insert(KeyType k);		// insert k into the tree
 		void remove(KeyType k);		// delete first item with key equal to k
 		rbtree<KeyType>& deepCopy(Node<KeyType>* subtreeRoot);		// copy method for = operator and copy constructor
@@ -67,9 +69,9 @@ class rbtree
 		Node<KeyType>* helpGet(KeyType k) const;
 		Node<KeyType>* recursiveRemove(Node<KeyType>* root, KeyType k);
 
-		void rightRotate();
-		void leftRotate();
-		void fixColor();
+		void leftRotate(Node<KeyType>* root, Node<KeyType>* pivot);
+		void rightRotate(Node<KeyType>* root, Node<KeyType>* pivot);
+		void fixColor(Node<KeyType>* root, Node<KeyType>* inNode);
 
 		Node<KeyType>* helpMin(Node<KeyType>* subtreeRoot) const;
 		KeyType* helpMax(Node<KeyType>* subtreeRoot) const;
