@@ -67,11 +67,12 @@ class rbtree
 	protected:
 		void clearNodes();
 		Node<KeyType>* helpGet(KeyType k) const;
-		Node<KeyType>* recursiveRemove(Node<KeyType>* root, KeyType k);
 
 		void leftRotate(Node<KeyType>* root, Node<KeyType>* pivot);
 		void rightRotate(Node<KeyType>* root, Node<KeyType>* pivot);
 		void fixColor(Node<KeyType>* root, Node<KeyType>* inNode);
+		void rTransplant(Node<KeyType>* root, Node<KeyType>* u, Node<KeyType>* v);
+		void deleteFixColor(Node<KeyType>* root, Node<KeyType>* x);
 
 		Node<KeyType>* helpMin(Node<KeyType>* subtreeRoot) const;
 		KeyType* helpMax(Node<KeyType>* subtreeRoot) const;

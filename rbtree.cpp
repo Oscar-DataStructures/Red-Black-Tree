@@ -204,70 +204,145 @@ void rbtree<KeyType>::remove(KeyType k)
 // PreConditions:		Tree cannot be empty and key must be in rbtree
 // PostConditions:	Node with value k will be removed and tree restructured
 {
-  Node<KeyType>* newRoot = recursiveRemove(root, k);
-	root = newRoot;							//restructures root
+	Node<KeyType>* z = newNode(k);
+	Node<KeyType>* y = z;
+	Node<KeyType>* x = newNode(k);
+	bool yColor = y.getColor();
+	if (z.left == NULL)
+	{
+		x = z.right;
+		rTransplant(root, z, z.right);
+	}
+
+	else if (z.right == NULL)
+	{
+		x = z.left;
+		rTransplant(root, z, z.left);
+	}
+
+	else
+	{
+		y = helpMin(z.right);
+		yColor = y.getColor();
+		x = y.right;
+		if (y.parent == z)
+		{
+			x.parent = y;
+		}
+
+		else
+		{
+			rTransplant(root, y, y.right);
+			y.right = z.right;
+			y.right.parent = y;
+		}
+
+		rTransplant(root, z, y);
+		y.left = z.left;
+		y.left.parent = y;
+		y.color = z.color;
+
+	}
+
+	if (yColor == 0)
+	{
+		deleteFixColor(root, x);
+	}
 }
 
 
-// ============================= Remove Recursive Method =======================
+// ================================ Transplant Method ==============================
 template <class KeyType>
-Node<KeyType>* rbtree<KeyType>::recursiveRemove(Node<KeyType>* subtreeRoot, KeyType k)
+void rbtree<KeyType>::rTransplant(Node<KeyType>* root, Node<KeyType>* u, Node<KeyType>* v)
 // PreConditions:		Tree cannot be empty and key must be in rbtree
-// PostConditions:  Return new keytype node pointer subtree with node with value k removed
+// PostConditions:	Node with value k will be removed and tree restructured
 {
-	if (this->helpGet(k) == NULL)
-		throw KeyError();
-
-  if (subtreeRoot == NULL)
+	if (u.parent == NULL)
 	{
-    return subtreeRoot; 							//ends the function since there is nothing to remove
+		root = v;
 	}
-
-  if (k < subtreeRoot->key)						//Left tree traversal
+	else if (u == u.parent.left)
 	{
-		Node<KeyType>* nodeToAttach = recursiveRemove(subtreeRoot->left, k);
-    subtreeRoot->left = nodeToAttach;
-		nodeToAttach->parent = subtreeRoot;
-  }
-
-	else if (k > subtreeRoot->key)			//Right tree traversal
-	{
-		Node<KeyType>* nodeToAttach = recursiveRemove(subtreeRoot->right, k);
-		subtreeRoot->right = nodeToAttach;
-		nodeToAttach->parent = subtreeRoot;
+		u.parent.left = v;
 	}
-
-	else if (k == subtreeRoot->key)		// for the else portion I looked at https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ for refrence
+	else
 	{
-		if (subtreeRoot->left == NULL && subtreeRoot->right == NULL) //if root has no children
-		{
-			delete subtreeRoot;
-			return NULL;
-		}
-
-		else if(subtreeRoot->left == NULL) 								//if no left child
-		{
-			Node<KeyType>* tmp = subtreeRoot->right; 				//make the right child root
-			delete subtreeRoot;
-			return tmp;
-		}
-
-		else if(subtreeRoot->right == NULL) 							//if no right child
-		{
-
-			Node<KeyType>* tmp = subtreeRoot->left; 				//make the left child root
-			delete subtreeRoot;
-			return tmp;
-		}
-
-		Node<KeyType>* tmp = successorNode(subtreeRoot->key); // get the successor whose value will become new root
-		subtreeRoot->key = tmp->key;
-		subtreeRoot->right = recursiveRemove(subtreeRoot->right, tmp->key);
+		u.parent.right = v;
 	}
-
-	return subtreeRoot;
+	v.parent = u.parent;
 }
 
+
+// ================================ deleteFixColor Method ==============================
+template <class KeyType>
+void rbtree<KeyType>::deleteFixColor(Node<KeyType>* root, Node<KeyType>* x)
+// PreConditions:		Tree cannot be empty and key must be in rbtree
+// PostConditions:	Node with value k will be removed and tree restructured
+{
+	while (x != root && x.getColor() == 0)
+	{
+		if (x == x.parent.left)
+		{
+			Node<KeyType>* w = x.parent.right;
+			if (w.getColor() == 1)
+			{
+				w.color = 0;
+				x.parent.color = 1;
+				leftRotate(root, x.parent);
+				w = x.parent.right;
+			}
+			if (w.left.getColor() == 0 && w.right.getColor() == 0)
+			{
+				w.color = 1;
+				x = x.parent;
+			}
+			else if (w.right.getColor() == 0)
+			{
+				w.left.color = 0;
+				w.color = 1;
+				rightRotate(root, w);
+				w = x.parent.right;
+
+			}
+			w.color = x.parent.color;
+			x.parent.color = 0;
+			w.right.color = 0;
+			leftRotate(root, x.parent);
+			x = root;
+		}
+
+		else
+		{
+			Node<KeyType>* w = x.parent.left;
+			if (w.getColor() == 1)
+			{
+				w.color = 0;
+				x.parent.color = 1;
+				leftRotate(root, x.parent);
+				w = x.parent.left;
+			}
+			if (w.right.getColor() == 0 && w.left.getColor() == 0)
+			{
+				w.color = 1;
+				x = x.parent;
+			}
+			else if (w.left.getColor() == 0)
+			{
+				w.right.color = 0;
+				w.color = 1;
+				rightRotate(root, w);
+				w = x.parent.left;
+
+			}
+			w.color = x.parent.color;
+			x.parent.color = 0;
+			w.left.color = 0;
+			leftRotate(root, x.parent);
+			x = root;
+		}
+	}
+	x.color = 0;
+}
 
 // =========================== Left Rotate Method ========-====================
 template <class KeyType>
