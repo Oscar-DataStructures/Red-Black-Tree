@@ -88,6 +88,7 @@ Dictionary<KVPair> loadDataFile()
         // We won't do anything here.
         // The first occurence of a key that is added will always prevail.
       }
+			cout << "inserted" << endl;
     }
 
     movieFile.close();

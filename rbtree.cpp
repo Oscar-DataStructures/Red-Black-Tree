@@ -400,19 +400,20 @@ void rbtree<KeyType>::rightRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 	Node<KeyType>* y = pivot->left;
 	pivot->left = y->right;
 
-	if (pivot->left != NULL)
-		pivot->left->parent = pivot;
+	if (y->right != NULL)
+		y->right->parent = pivot;
 
 	y->parent = pivot->parent;
 
-	if (pivot->parent == NULL)
+
+	if (pivot->parent ==	NULL)
 		root = y;
 
-	else if (pivot == pivot->parent->left)
-		pivot->parent->left = y;
+	else if (pivot == pivot->parent->right)
+		pivot->parent->right = y;
 
 	else
-		pivot->parent->right = y;
+		pivot->parent->left = y;
 
 	y->right = pivot;
 	pivot->parent = y;
