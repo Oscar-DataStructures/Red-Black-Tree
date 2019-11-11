@@ -46,6 +46,8 @@ class rbtree
 
 		KeyType* get(KeyType k) const;		// return first item with key equal to k
 
+		Node<KeyType>* getNode(KeyType k) const; // get but returns node instead. Used to test fixColor
+
 		bool getColor(KeyType k);		//gets the color of the first node with key equal to k
 
 		void insert(KeyType k);		// insert k into the tree
@@ -67,6 +69,7 @@ class rbtree
 	protected:
 		void clearNodes();
 		Node<KeyType>* helpGet(KeyType k) const;
+		Node<KeyType>* recursiveRemove(Node<KeyType>* root, KeyType k);
 
 		void leftRotate(Node<KeyType>* root, Node<KeyType>* pivot);
 		void rightRotate(Node<KeyType>* root, Node<KeyType>* pivot);

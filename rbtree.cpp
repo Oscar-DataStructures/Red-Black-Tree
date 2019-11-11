@@ -112,6 +112,20 @@ KeyType* rbtree<KeyType>::get(KeyType k) const
 	return &(helpGet(k)->key);
 }
 
+// ================================= Get Node Method ================================
+template <class KeyType>
+Node<KeyType>* rbtree<KeyType>::getNode(KeyType k) const
+// PreConditions: 	Tree must exist and not be empty
+// PostConditions:  Return first item in rbtree that has key k
+{
+	// cout << "Value: " << helpGet(k) << endl;
+	// cout << "Pointer: " << this->helpGet(k) << endl;
+	if (this->helpGet(k) == NULL)
+		throw KeyError();
+
+	return helpGet(k);
+}
+
 
 // ============================== Help Get Method ==============================
 template <class KeyType>
@@ -193,8 +207,10 @@ void rbtree<KeyType>::insert(KeyType k)
     y->right = z;
 		z->parent = y;
 	}
-
-	fixColor(root, z);
+	// if (root == z)
+	// 	z->color = BLACK;
+	// else if (root != z)
+		fixColor(root, z);
 }
 
 
@@ -344,17 +360,20 @@ void rbtree<KeyType>::deleteFixColor(Node<KeyType>* root, Node<KeyType>* x)
 	x.color = 0;
 }
 
-// =========================== Left Rotate Method ========-====================
+
+// =========================== Left Rotate Method ============================
 template <class KeyType>
 void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 {
+	cout << "left rotate called" << endl;
 	Node<KeyType>* y = pivot->right;
 	pivot->right = y->left;
 
 	if (y->left != NULL)
-		y->parent = pivot;
+		y->left->parent = pivot;
 
-	y->parent = pivot->parent;
+	y->parent = pivot->parent;			//cout << "2" << endl;
+
 
 	if (pivot->parent ==	NULL)
 		root = y;
@@ -364,6 +383,7 @@ void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 
 	else
 		pivot->parent->right = y;
+			//cout << "2" << endl;
 
 	y->left = pivot;
 	pivot->parent = y;
@@ -373,23 +393,21 @@ void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 // =========================== Right Rotate Method ==============================
 template <class KeyType>
 void rbtree<KeyType>::rightRotate(Node<KeyType>* root, Node<KeyType>* pivot)
-// PreConditions:		N/A
+// PreConditions:		N/A			//cout << "2" << endl;
+
 // PostConditions:
 {
+	cout << "right rotate called" << endl;
 	Node<KeyType>* y = pivot->left;
 	pivot->left = y->right;
 
 	if (pivot->left != NULL)
 		pivot->left->parent = pivot;
-
 	y->parent = pivot->parent;
-
 	if (pivot->parent ==	NULL)
 		root = y;
-
 	else if (pivot == pivot->parent->left)
 		pivot->parent->left = y;
-
 	else
 		pivot->parent->right = y;
 
@@ -402,9 +420,71 @@ void rbtree<KeyType>::rightRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 template <class KeyType>
 void rbtree<KeyType>::fixColor(Node<KeyType>* root, Node<KeyType>* inNode)
 // PreConditions:		N/A
-// PostConditions:
+// PostConditions:	Violations created by insert fixed
 {
-
+	while (inNode->parent != NULL && inNode->parent->color == RED)
+	{
+		bool parentsParentExists = (inNode->parent->parent != NULL);
+		if (!parentsParentExists) break;
+		if (parentsParentExists && inNode->parent == inNode->parent->parent->left)
+		{
+			// if inNode's parent is a left child
+			bool uncleExists = (inNode->parent->parent->right != NULL);
+			bool uncleRed = false;
+			if (uncleExists)
+			{
+				Node<KeyType>* y = inNode->parent->parent->right; // uncle is right child
+				uncleRed = y->color == RED;
+				if (uncleRed)		// case 1
+				{
+					inNode->parent->color = BLACK;
+					y->color = BLACK;
+					inNode->parent->parent->color = RED;
+					inNode = inNode->parent->parent;
+				}
+			}
+				if (!uncleRed && inNode == inNode->parent->right) // case 2
+				{
+					inNode = inNode->parent;
+					leftRotate(root, inNode);
+				}
+				else if (!uncleRed && inNode == inNode->parent->left)	// case 3
+				{
+					inNode->parent->color = BLACK;
+					inNode->parent->parent->color = RED;
+					rightRotate(root, inNode->parent->parent);
+				}
+			}
+		else if (parentsParentExists && inNode->parent == inNode->parent->parent->right)	// if inNode's parent is a right child
+		{
+			bool uncleExists = (inNode->parent->parent->left != NULL);
+			bool uncleRed = false;
+			if (uncleExists)
+			{
+				Node<KeyType>* y = inNode->parent->parent->left; // uncle is left child
+				uncleRed = y->color == RED;
+				if (uncleRed)		// case 1
+				{
+					inNode->parent->color = BLACK;
+					y->color = BLACK;
+					inNode->parent->parent->color = RED;
+					inNode = inNode->parent->parent;
+		  	}
+			}
+			if (!uncleRed && inNode == inNode->parent->right) // case 2
+			{
+				inNode = inNode->parent;
+				leftRotate(root, inNode);
+			}
+			else if (!uncleRed && inNode == inNode->parent->left)	// case 3
+			{
+				inNode->parent->color = BLACK;
+				inNode->parent->parent->color = RED;
+				rightRotate(root, inNode->parent->parent);
+			}
+		}
+	}
+	root->color = BLACK;
 }
 
 
