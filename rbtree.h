@@ -17,7 +17,7 @@ Project 7
 
 using namespace std;
 
-enum Color {RED, BLACK};		//makes red = 1, 0 = black
+enum Color {RED, BLACK};		//makes red = 0, 1 = black
 
 template <class KeyType>
 class Node
@@ -25,7 +25,7 @@ class Node
 	public:
 
 		KeyType key;		//value held in node
-		bool color;		//color of node. 1 is red, 0 is black
+		bool color;		//color of node. 0 is red, 1 is black
 
 		Node<KeyType>* parent;		//parent node
 		Node<KeyType>* left;		//left child
@@ -71,8 +71,8 @@ class rbtree
 		Node<KeyType>* helpGet(KeyType k) const;
 		Node<KeyType>* recursiveRemove(Node<KeyType>* root, KeyType k);
 
-		void leftRotate(Node<KeyType>* root, Node<KeyType>* pivot);
-		void rightRotate(Node<KeyType>* root, Node<KeyType>* pivot);
+		void leftRotate(Node<KeyType>* pivot);
+		void rightRotate(Node<KeyType>* pivot);
 		void fixColor(Node<KeyType>* root, Node<KeyType>* inNode);
 		void rTransplant(Node<KeyType>* root, Node<KeyType>* u, Node<KeyType>* v);
 		void deleteFixColor(Node<KeyType>* root, Node<KeyType>* x);

@@ -27,25 +27,24 @@ void test_copyConstructor()
 	rbtree<int> b(a);
 	assert(a.empty() == 1);
 	assert(b.empty() == 1);
-
 	a.insert(1);
-	// a.insert(5);
-	// a.insert(10);
-	// a.insert(15);
-	// assert(a.inOrder() == "1, 5, 10, 15");
-	//
-	// rbtree<int> c(a);
-	// assert(c.empty() == 0);
-	// assert(c.inOrder() == "1, 5, 10, 15");
-	//
-	// // Now, if we modify each of them, it will not affect the other.
-	// a.insert(4);
-	// assert(a.inOrder() == "1, 4, 5, 10, 15");
-	// assert(c.inOrder() == "1, 5, 10, 15");
-	//
-	// c.insert(7);
-	// assert(a.inOrder() == "1, 4, 5, 10, 15");
-	// assert(c.inOrder() == "1, 5, 7, 10, 15");
+	a.insert(5);
+	a.insert(10);
+	a.insert(15);
+
+	assert(a.inOrder() == "1, 5, 10, 15");
+	rbtree<int> c(a);
+	assert(c.empty() == 0);
+	assert(c.inOrder() == "1, 5, 10, 15");
+
+	//Now, if we modify each of them, it will not affect the other.
+	a.insert(4);
+	assert(a.inOrder() == "1, 4, 5, 10, 15");
+	assert(c.inOrder() == "1, 5, 10, 15");
+
+	c.insert(7);
+	assert(a.inOrder() == "1, 4, 5, 10, 15");
+	assert(c.inOrder() == "1, 5, 7, 10, 15");
 
 }
 
@@ -335,7 +334,7 @@ void test_preOrder()
 	a.insert(4);
 	a.insert(5);
 
-	assert(a.preOrder() == "3, 2, 1, 4, 5");
+	assert(a.preOrder() == "2, 1, 4, 3, 5");
 
 	rbtree<int> b;
 
@@ -365,7 +364,7 @@ void test_postOrder()
 	a.insert(4);
 	a.insert(5);
 
-	assert(a.postOrder() == "1, 2, 5, 4, 3");
+	assert(a.preOrder() == "2, 1, 4, 3, 5");
 
 	rbtree<int> b;
 
@@ -397,8 +396,8 @@ int main()
 	cout << "Empty Test			|Passed|" << endl;
 	test_get_insert();
 	cout << "Get/Insert Test			|Passed|" << endl;
-	// test_remove();
-	// cout << "Remove Test			|Passed|" << endl;
+	test_remove();
+	cout << "Remove Test			|Passed|" << endl;
 	test_max();
 	cout << "Max Test			|Passed|" << endl;
 	test_min();
