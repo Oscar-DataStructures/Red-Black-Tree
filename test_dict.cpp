@@ -163,63 +163,63 @@ bool operator== (const KVPair &kv1, const KVPair &kv2)
 
 
 	// ============================= Test Remove Method ============================
-	void test_remove()
-	{
-		Dictionary<KVPair> dictA;
-
-		KVPair pair1;
-		pair1.key = "apple";
-		pair1.value = "yum";
-		dictA.insert(pair1);
-
-		KVPair pair2;
-		pair2.key = "banana";
-		pair2.value = "yummy";
-		dictA.insert(pair2);
-
-		KVPair pair3;
-		pair3.key = "aardvark";
-		pair3.value = "eww";
-		dictA.insert(pair3);
-
-		KVPair getObj;
-		getObj.key = "apple";
-		assert(dictA.get(getObj)->value == "yum");
-		getObj.key = "banana";
-		assert(dictA.get(getObj)->value == "yummy");
-		getObj.key = "aardvark";
-		assert(dictA.get(getObj)->value == "eww");
-
-		getObj.key = "apple";
-		dictA.remove(getObj);
-
-		getObj.key = "apple";
-		assert(dictA.get(getObj) == NULL);
-		getObj.key = "banana";
-		assert(dictA.get(getObj)->value == "yummy");
-		getObj.key = "aardvark";
-		assert(dictA.get(getObj)->value == "eww");
-
-		getObj.key = "banana";
-		dictA.remove(getObj);
-
-		getObj.key = "apple";
-		assert(dictA.get(getObj) == NULL);
-		getObj.key = "banana";
-		assert(dictA.get(getObj) == NULL);
-		getObj.key = "aardvark";
-		assert(dictA.get(getObj)->value == "eww");
-
-		getObj.key = "aardvark";
-		dictA.remove(getObj);
-
-		getObj.key = "apple";
-		assert(dictA.get(getObj) == NULL);
-		getObj.key = "banana";
-		assert(dictA.get(getObj) == NULL);
-		getObj.key = "aardvark";
-		assert(dictA.get(getObj) == NULL);
-	}
+	// void test_remove()
+	// {
+	// 	Dictionary<KVPair> dictA;
+	//
+	// 	KVPair pair1;
+	// 	pair1.key = "apple";
+	// 	pair1.value = "yum";
+	// 	dictA.insert(pair1);
+	//
+	// 	KVPair pair2;
+	// 	pair2.key = "banana";
+	// 	pair2.value = "yummy";
+	// 	dictA.insert(pair2);
+	//
+	// 	KVPair pair3;
+	// 	pair3.key = "aardvark";
+	// 	pair3.value = "eww";
+	// 	dictA.insert(pair3);
+	//
+	// 	KVPair getObj;
+	// 	getObj.key = "apple";
+	// 	assert(dictA.get(getObj)->value == "yum");
+	// 	getObj.key = "banana";
+	// 	assert(dictA.get(getObj)->value == "yummy");
+	// 	getObj.key = "aardvark";
+	// 	assert(dictA.get(getObj)->value == "eww");
+	//
+	// 	getObj.key = "apple";
+	// 	dictA.remove(getObj);
+	//
+	// 	getObj.key = "apple";
+	// 	assert(dictA.get(getObj) == NULL);
+	// 	getObj.key = "banana";
+	// 	assert(dictA.get(getObj)->value == "yummy");
+	// 	getObj.key = "aardvark";
+	// 	assert(dictA.get(getObj)->value == "eww");
+	//
+	// 	getObj.key = "banana";
+	// 	dictA.remove(getObj);
+	//
+	// 	getObj.key = "apple";
+	// 	assert(dictA.get(getObj) == NULL);
+	// 	getObj.key = "banana";
+	// 	assert(dictA.get(getObj) == NULL);
+	// 	getObj.key = "aardvark";
+	// 	assert(dictA.get(getObj)->value == "eww");
+	//
+	// 	getObj.key = "aardvark";
+	// 	dictA.remove(getObj);
+	//
+	// 	getObj.key = "apple";
+	// 	assert(dictA.get(getObj) == NULL);
+	// 	getObj.key = "banana";
+	// 	assert(dictA.get(getObj) == NULL);
+	// 	getObj.key = "aardvark";
+	// 	assert(dictA.get(getObj) == NULL);
+	// }
 
 
 	// ==================================== Main ===================================
@@ -234,8 +234,8 @@ bool operator== (const KVPair &kv1, const KVPair &kv2)
 		cout << "Empty Test				|Passed|" << endl;
 		test_insert_and_get();
 		cout << "Insert and Get Test			|Passed|" << endl;
-		test_remove();
-		cout << "Remove Test				|Passed|" << endl;
+		// test_remove();
+		// cout << "Remove Test				|Passed|" << endl;
 
 		return 0;
 	}

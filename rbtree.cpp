@@ -215,164 +215,166 @@ void rbtree<KeyType>::insert(KeyType k)
 
 
 // ================================ Remove Method ==============================
-template <class KeyType>
-void rbtree<KeyType>::remove(KeyType k)
-// PreConditions:		Tree cannot be empty and key must be in rbtree
-// PostConditions:	Node with value k will be removed and tree restructured
-{
-	Node<KeyType>* z = newNode(k);
-	Node<KeyType>* y = z;
-	Node<KeyType>* x = newNode(k);
-	bool yColor = y.getColor();
-	if (z.left == NULL)
-	{
-		x = z.right;
-		rTransplant(root, z, z.right);
-	}
-
-	else if (z.right == NULL)
-	{
-		x = z.left;
-		rTransplant(root, z, z.left);
-	}
-
-	else
-	{
-		y = helpMin(z.right);
-		yColor = y.getColor();
-		x = y.right;
-		if (y.parent == z)
-		{
-			x.parent = y;
-		}
-
-		else
-		{
-			rTransplant(root, y, y.right);
-			y.right = z.right;
-			y.right.parent = y;
-		}
-
-		rTransplant(root, z, y);
-		y.left = z.left;
-		y.left.parent = y;
-		y.color = z.color;
-
-	}
-
-	if (yColor == 0)
-	{
-		deleteFixColor(root, x);
-	}
-}
+// template <class KeyType>
+// void rbtree<KeyType>::remove(KeyType k)
+// // PreConditions:		Tree cannot be empty and key must be in rbtree
+// // PostConditions:	Node with value k will be removed and tree restructured
+// {
+// 	Node<KeyType>* z = newNode(k);
+// 	Node<KeyType>* y = z;
+// 	Node<KeyType>* x = newNode(k);
+// 	bool yColor = y.getColor();
+// 	if (z.left == NULL)
+// 	{
+// 		x = z.right;
+// 		rTransplant(root, z, z.right);
+// 	}
+//
+// 	else if (z.right == NULL)
+// 	{
+// 		x = z.left;
+// 		rTransplant(root, z, z.left);
+// 	}
+//
+// 	else
+// 	{
+// 		y = helpMin(z.right);
+// 		yColor = y.getColor();
+// 		x = y.right;
+// 		if (y.parent == z)
+// 		{
+// 			x.parent = y;
+// 		}
+//
+// 		else
+// 		{
+// 			rTransplant(root, y, y.right);
+// 			y.right = z.right;
+// 			y.right.parent = y;
+// 		}
+//
+// 		rTransplant(root, z, y);
+// 		y.left = z.left;
+// 		y.left.parent = y;
+// 		y.color = z.color;
+//
+// 	}
+//
+// 	if (yColor == 0)
+// 	{
+// 		deleteFixColor(root, x);
+// 	}
+// }
 
 
 // ================================ Transplant Method ==============================
-template <class KeyType>
-void rbtree<KeyType>::rTransplant(Node<KeyType>* root, Node<KeyType>* u, Node<KeyType>* v)
-// PreConditions:		Tree cannot be empty and key must be in rbtree
-// PostConditions:	Node with value k will be removed and tree restructured
-{
-	if (u.parent == NULL)
-	{
-		root = v;
-	}
-	else if (u == u.parent.left)
-	{
-		u.parent.left = v;
-	}
-	else
-	{
-		u.parent.right = v;
-	}
-	v.parent = u.parent;
-}
+// template <class KeyType>
+// void rbtree<KeyType>::rTransplant(Node<KeyType>* root, Node<KeyType>* u, Node<KeyType>* v)
+// // PreConditions:		Tree cannot be empty and key must be in rbtree
+// // PostConditions:	Node with value k will be removed and tree restructured
+// {
+// 	if (u.parent == NULL)
+// 	{
+// 		root = v;
+// 	}
+// 	else if (u == u.parent.left)
+// 	{
+// 		u.parent.left = v;
+// 	}
+// 	else
+// 	{
+// 		u.parent.right = v;
+// 	}
+// 	v.parent = u.parent;
+// }
 
 
 // ================================ deleteFixColor Method ==============================
-template <class KeyType>
-void rbtree<KeyType>::deleteFixColor(Node<KeyType>* root, Node<KeyType>* x)
-// PreConditions:		Tree cannot be empty and key must be in rbtree
-// PostConditions:	Node with value k will be removed and tree restructured
-{
-	while (x != root && x.getColor() == 0)
-	{
-		if (x == x.parent.left)
-		{
-			Node<KeyType>* w = x.parent.right;
-			if (w.getColor() == 1)
-			{
-				w.color = 0;
-				x.parent.color = 1;
-				leftRotate(root, x.parent);
-				w = x.parent.right;
-			}
-			if (w.left.getColor() == 0 && w.right.getColor() == 0)
-			{
-				w.color = 1;
-				x = x.parent;
-			}
-			else if (w.right.getColor() == 0)
-			{
-				w.left.color = 0;
-				w.color = 1;
-				rightRotate(root, w);
-				w = x.parent.right;
-
-			}
-			w.color = x.parent.color;
-			x.parent.color = 0;
-			w.right.color = 0;
-			leftRotate(root, x.parent);
-			x = root;
-		}
-
-		else
-		{
-			Node<KeyType>* w = x.parent.left;
-			if (w.getColor() == 1)
-			{
-				w.color = 0;
-				x.parent.color = 1;
-				leftRotate(root, x.parent);
-				w = x.parent.left;
-			}
-			if (w.right.getColor() == 0 && w.left.getColor() == 0)
-			{
-				w.color = 1;
-				x = x.parent;
-			}
-			else if (w.left.getColor() == 0)
-			{
-				w.right.color = 0;
-				w.color = 1;
-				rightRotate(root, w);
-				w = x.parent.left;
-
-			}
-			w.color = x.parent.color;
-			x.parent.color = 0;
-			w.left.color = 0;
-			leftRotate(root, x.parent);
-			x = root;
-		}
-	}
-	x.color = 0;
-}
+// template <class KeyType>
+// void rbtree<KeyType>::deleteFixColor(Node<KeyType>* root, Node<KeyType>* x)
+// // PreConditions:		Tree cannot be empty and key must be in rbtree
+// // PostConditions:	Node with value k will be removed and tree restructured
+// {
+// 	while (x != root && x.getColor() == 0)
+// 	{
+// 		if (x == x.parent.left)
+// 		{
+// 			Node<KeyType>* w = x.parent.right;
+// 			if (w.getColor() == 1)
+// 			{
+// 				w.color = 0;
+// 				x.parent.color = 1;
+// 				leftRotate(root, x.parent);
+// 				w = x.parent.right;
+// 			}
+// 			if (w.left.getColor() == 0 && w.right.getColor() == 0)
+// 			{
+// 				w.color = 1;
+// 				x = x.parent;
+// 			}
+// 			else if (w.right.getColor() == 0)
+// 			{
+// 				w.left.color = 0;
+// 				w.color = 1;
+// 				rightRotate(root, w);
+// 				w = x.parent.right;
+//
+// 			}
+// 			w.color = x.parent.color;
+// 			x.parent.color = 0;
+// 			w.right.color = 0;
+// 			leftRotate(root, x.parent);
+// 			x = root;
+// 		}
+//
+// 		else
+// 		{
+// 			Node<KeyType>* w = x.parent.left;
+// 			if (w.getColor() == 1)
+// 			{
+// 				w.color = 0;
+// 				x.parent.color = 1;
+// 				leftRotate(root, x.parent);
+// 				w = x.parent.left;
+// 			}
+// 			if (w.right.getColor() == 0 && w.left.getColor() == 0)
+// 			{
+// 				w.color = 1;
+// 				x = x.parent;
+// 			}
+// 			else if (w.left.getColor() == 0)
+// 			{
+// 				w.right.color = 0;
+// 				w.color = 1;
+// 				rightRotate(root, w);
+// 				w = x.parent.left;
+//
+// 			}
+// 			w.color = x.parent.color;
+// 			x.parent.color = 0;
+// 			w.left.color = 0;
+// 			leftRotate(root, x.parent);
+// 			x = root;
+// 		}
+// 	}
+// 	x.color = 0;
+// }
 
 
 // =========================== Left Rotate Method ============================
+
 template <class KeyType>
 void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
+// PreConditions:	N/A
+// PostCOnditions: A left rotation at pivot
 {
-	cout << "left rotate called" << endl;
 	Node<KeyType>* y = pivot->right;
 	pivot->right = y->left;
 
 	if (y->left != NULL)
 		y->left->parent = pivot;
 
-	y->parent = pivot->parent;			//cout << "2" << endl;
+	y->parent = pivot->parent;
 
 
 	if (pivot->parent ==	NULL)
@@ -383,7 +385,6 @@ void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 
 	else
 		pivot->parent->right = y;
-			//cout << "2" << endl;
 
 	y->left = pivot;
 	pivot->parent = y;
@@ -393,21 +394,23 @@ void rbtree<KeyType>::leftRotate(Node<KeyType>* root, Node<KeyType>* pivot)
 // =========================== Right Rotate Method ==============================
 template <class KeyType>
 void rbtree<KeyType>::rightRotate(Node<KeyType>* root, Node<KeyType>* pivot)
-// PreConditions:		N/A			//cout << "2" << endl;
-
-// PostConditions:
+// PreConditions:		N/A
+// PostConditions: A right rotation at pivot
 {
-	cout << "right rotate called" << endl;
 	Node<KeyType>* y = pivot->left;
 	pivot->left = y->right;
 
 	if (pivot->left != NULL)
 		pivot->left->parent = pivot;
+
 	y->parent = pivot->parent;
-	if (pivot->parent ==	NULL)
+
+	if (pivot->parent == NULL)
 		root = y;
+
 	else if (pivot == pivot->parent->left)
 		pivot->parent->left = y;
+
 	else
 		pivot->parent->right = y;
 
@@ -422,7 +425,7 @@ void rbtree<KeyType>::fixColor(Node<KeyType>* root, Node<KeyType>* inNode)
 // PreConditions:		N/A
 // PostConditions:	Violations created by insert fixed
 {
-	while (inNode->parent != NULL && inNode->parent->color == RED)
+	while (inNode->parent != NULL && inNode->parent->color == RED && inNode->color != BLACK)
 	{
 		bool parentsParentExists = (inNode->parent->parent != NULL);
 		if (!parentsParentExists) break;
@@ -443,18 +446,23 @@ void rbtree<KeyType>::fixColor(Node<KeyType>* root, Node<KeyType>* inNode)
 					inNode = inNode->parent->parent;
 				}
 			}
+			else
+			{
 				if (!uncleRed && inNode == inNode->parent->right) // case 2
 				{
+					leftRotate(root, inNode->parent);
 					inNode = inNode->parent;
-					leftRotate(root, inNode);
 				}
 				else if (!uncleRed && inNode == inNode->parent->left)	// case 3
 				{
-					inNode->parent->color = BLACK;
-					inNode->parent->parent->color = RED;
 					rightRotate(root, inNode->parent->parent);
+					bool tmp = inNode->parent->color;
+					inNode->parent->color = inNode->parent->parent->color;
+					inNode->parent->parent->color = tmp;
+					inNode = inNode->parent;
 				}
 			}
+		}
 		else if (parentsParentExists && inNode->parent == inNode->parent->parent->right)	// if inNode's parent is a right child
 		{
 			bool uncleExists = (inNode->parent->parent->left != NULL);
@@ -473,14 +481,16 @@ void rbtree<KeyType>::fixColor(Node<KeyType>* root, Node<KeyType>* inNode)
 			}
 			if (!uncleRed && inNode == inNode->parent->right) // case 2
 			{
+				leftRotate(root, inNode->parent);
 				inNode = inNode->parent;
-				leftRotate(root, inNode);
 			}
 			else if (!uncleRed && inNode == inNode->parent->left)	// case 3
 			{
-				inNode->parent->color = BLACK;
-				inNode->parent->parent->color = RED;
-				rightRotate(root, inNode->parent->parent);
+				rightRotate(root, inNode->parent);
+				bool tmp = inNode->parent->color;
+				inNode->parent->color = inNode->parent->parent->color;
+				inNode->parent->parent->color = tmp;
+				inNode = inNode->parent;
 			}
 		}
 	}
@@ -496,9 +506,9 @@ rbtree<KeyType>& rbtree<KeyType>::deepCopy(Node<KeyType>* subtreeRoot)
 {
 	if(subtreeRoot != NULL)
   {
-		// This does an pre-order walk through the tree, and inserts items in that order.
-		this->insert(subtreeRoot->key);
+		// This does an in-order walk through the tree, and inserts items in that order.
 		deepCopy(subtreeRoot->left);
+		this->insert(subtreeRoot->key);
 		deepCopy(subtreeRoot->right);
 	}
 

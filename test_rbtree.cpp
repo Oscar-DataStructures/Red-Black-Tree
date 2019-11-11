@@ -141,13 +141,9 @@ void test_max()
 {
 	rbtree<int> a;
 	a.insert(1);
-		cout << "1" << endl;
 	a.insert(2);
-		cout << "1" << endl;
 	a.insert(3);
-		cout << "1" << endl;
 	a.insert(4);
-	cout << "1" << endl;
 	assert(*(a.maximum()) == 4);
 
 	rbtree<int> b;
@@ -162,7 +158,7 @@ void test_max()
 	b.insert(3);
 	b.insert(9);
 
-	// assert(*(b.maximum()) == 14);
+	assert(*(b.maximum()) == 14);
 
 }
 
@@ -170,28 +166,28 @@ void test_max()
 // ================================ Test Min Method ============================
 void test_min()
 {
-	// rbtree<int> a;
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(3);
-	// a.insert(4);
-	// assert(*(a.minimum()) == 1);
-	// a.remove(1);
-	// assert(*(a.minimum()) == 2);
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(*(b.minimum()) == 3);
+	rbtree<int> a;
+	a.insert(1);
+	a.insert(2);
+	a.insert(3);
+	a.insert(4);
+	assert(*(a.minimum()) == 1);
+	//a.remove(1);  ** not implemented -- didn't get to extra credit
+	//assert(*(a.minimum()) == 2);
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(*(b.minimum()) == 3);
 
 }
 
@@ -199,38 +195,38 @@ void test_min()
 // ============================= Test Successor Method =========================
 void test_successor()
 {
-	// rbtree<int> a;
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(3);
-	// a.insert(4);
-	//
-	// assert(*(a.successor(1)) == 2);
-	// assert(*(a.successor(2)) == 3);
-	// assert(*(a.successor(3)) == 4);
+	rbtree<int> a;
+	a.insert(1);
+	a.insert(2);
+	a.insert(3);
+	a.insert(4);
+
+	assert(*(a.successor(1)) == 2);
+	assert(*(a.successor(2)) == 3);
+	assert(*(a.successor(3)) == 4);
 	// //a.successor(4); //uncomment to see KeyError
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(*(b.successor(3)) == 4);
-	// assert(*(b.successor(4)) == 7);
-	// assert(*(b.successor(7)) == 8);
-	// assert(*(b.successor(8)) == 9);
-	// assert(*(b.successor(9)) == 10);
-	// assert(*(b.successor(10)) == 12);
-	// assert(*(b.successor(12)) == 13);
-	// assert(*(b.successor(13)) == 14);
-	//
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(*(b.successor(3)) == 4);
+	assert(*(b.successor(4)) == 7);
+	assert(*(b.successor(7)) == 8);
+	assert(*(b.successor(8)) == 9);
+	assert(*(b.successor(9)) == 10);
+	assert(*(b.successor(10)) == 12);
+	assert(*(b.successor(12)) == 13);
+	assert(*(b.successor(13)) == 14);
+
 	// //b.successor(14); //uncomment to see KeyError
 
 }
@@ -239,39 +235,38 @@ void test_successor()
 // ========================== Test Predecessor Method ==========================
 void test_predecessor()
 {
-	// rbtree<int> a;
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(3);
-	// a.insert(4);
-	//
-	// //a.predecessor(1); //uncomment to see KeyError
-	// assert(*(a.predecessor(2)) == 1);
-	// assert(*(a.predecessor(3)) == 2);
-	// assert(*(a.predecessor(4)) == 3);
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(*(b.predecessor(4)) == 3);
-	// assert(*(b.predecessor(7)) == 4);
-	// assert(*(b.predecessor(8)) == 7);
-	// assert(*(b.predecessor(9)) == 8);
-	// assert(*(b.predecessor(10)) == 9);
-	// assert(*(b.predecessor(12)) == 10);
-	// assert(*(b.predecessor(13)) == 12);
-	// assert(*(b.predecessor(14)) == 13);
-	//
-	// //b.predecessor(3); //uncomment to see KeyError
+	rbtree<int> a;
+	a.insert(1);
+	a.insert(2);
+	a.insert(3);
+	a.insert(4);
+	//a.predecessor(1); //uncomment to see KeyError
+	assert(*(a.predecessor(2)) == 1);
+	assert(*(a.predecessor(3)) == 2);
+	assert(*(a.predecessor(4)) == 3);
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(*(b.predecessor(4)) == 3);
+	assert(*(b.predecessor(7)) == 4);
+	assert(*(b.predecessor(8)) == 7);
+	assert(*(b.predecessor(9)) == 8);
+	assert(*(b.predecessor(10)) == 9);
+	assert(*(b.predecessor(12)) == 10);
+	assert(*(b.predecessor(13)) == 12);
+	assert(*(b.predecessor(14)) == 13);
+
+	//b.predecessor(3); //uncomment to see KeyError
 
 }
 
@@ -279,54 +274,52 @@ void test_predecessor()
 // =========================== Test Assignment Operator ========================
 void test_assignmentOP()
 {
-	// rbtree<int> a;
-	// rbtree<int>b;
-	//
-	// b = a;
-	// assert(a.empty() == 1);
-	// assert(b.empty() == 1);
-	//
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(3);
-	// a.insert(4);
-	//
-	// assert(a.empty() == 0);
-	// assert(a.inOrder() == "1, 2, 3, 4");
-	//
-	// b = a;
-	// assert(b.empty() == 0);
-	// assert(b.inOrder() == "1, 2, 3, 4");
+	rbtree<int> a;
+	rbtree<int>b;
 
+	b = a;
+	assert(a.empty() == 1);
+	assert(b.empty() == 1);
+
+	a.insert(1);
+	a.insert(2);
+	a.insert(3);
+	a.insert(4);
+
+	assert(a.empty() == 0);
+	assert(a.inOrder() == "1, 2, 3, 4");
+	b = a;
+	assert(b.empty() == 0);
+	assert(b.inOrder() == "1, 2, 3, 4");
 }
 
 
 // ============================ Test In Order Method ===========================
 void test_inOrder()
 {
-	// rbtree<int> a;
-	//
-	// a.insert(3);
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(4);
-	// a.insert(5);
-	//
-	// assert(a.inOrder() == "1, 2, 3, 4, 5");
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(b.inOrder() == "3, 4, 7, 8, 9, 10, 12, 13, 14");
+	rbtree<int> a;
+
+	a.insert(3);
+	a.insert(1);
+	a.insert(2);
+	a.insert(4);
+	a.insert(5);
+
+	assert(a.inOrder() == "1, 2, 3, 4, 5");
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(b.inOrder() == "3, 4, 7, 8, 9, 10, 12, 13, 14");
 
 }
 
@@ -334,29 +327,29 @@ void test_inOrder()
 // ============================= Test Pre Order Method =========================
 void test_preOrder()
 {
-	// rbtree<int> a;
-	//
-	// a.insert(3);
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(4);
-	// a.insert(5);
-	//
-	// assert(a.preOrder() == "3, 1, 2, 4, 5");
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(b.preOrder() == "10, 7, 4, 3, 8, 9, 13, 12, 14");
+	rbtree<int> a;
+
+	a.insert(3);
+	a.insert(1);
+	a.insert(2);
+	a.insert(4);
+	a.insert(5);
+
+	assert(a.preOrder() == "3, 2, 1, 4, 5");
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(b.preOrder() == "10, 7, 4, 3, 8, 9, 13, 12, 14");
 
 }
 
@@ -364,29 +357,29 @@ void test_preOrder()
 // ============================ Test Post Order Method =========================
 void test_postOrder()
 {
-	// rbtree<int> a;
-	//
-	// a.insert(3);
-	// a.insert(1);
-	// a.insert(2);
-	// a.insert(4);
-	// a.insert(5);
-	//
-	// assert(a.postOrder() == "2, 1, 5, 4, 3");
-	//
-	// rbtree<int> b;
-	//
-	// b.insert(10);
-	// b.insert(7);
-	// b.insert(13);
-	// b.insert(4);
-	// b.insert(8);
-	// b.insert(12);
-	// b.insert(14);
-	// b.insert(3);
-	// b.insert(9);
-	//
-	// assert(b.postOrder() == "3, 4, 9, 8, 7, 12, 14, 13, 10");
+	rbtree<int> a;
+
+	a.insert(3);
+	a.insert(1);
+	a.insert(2);
+	a.insert(4);
+	a.insert(5);
+
+	assert(a.postOrder() == "1, 2, 5, 4, 3");
+
+	rbtree<int> b;
+
+	b.insert(10);
+	b.insert(7);
+	b.insert(13);
+	b.insert(4);
+	b.insert(8);
+	b.insert(12);
+	b.insert(14);
+	b.insert(3);
+	b.insert(9);
+
+	assert(b.postOrder() == "3, 4, 9, 8, 7, 12, 14, 13, 10");
 
 }
 
@@ -410,18 +403,18 @@ int main()
 	cout << "Max Test			|Passed|" << endl;
 	test_min();
 	cout << "Min Test			|Passed|" << endl;
-	// test_successor();
-	// cout << "Successor Test			|Passed|" << endl;
-	// test_predecessor();
-	// cout << "Predecessor Test		|Passed|" << endl;
-	// test_assignmentOP();
-	// cout << "Assignment Test			|Passed|" << endl;
-	// test_inOrder();
-	// cout << "InOrder Test			|Passed|" << endl;
-	// test_preOrder();
-	// cout << "PreOrder Test			|Passed|" << endl;
-	// test_postOrder();
-	// cout << "PostOrder Test			|Passed|" << endl;
+	test_successor();
+	cout << "Successor Test			|Passed|" << endl;
+	test_predecessor();
+	cout << "Predecessor Test		|Passed|" << endl;
+	test_assignmentOP();
+	cout << "Assignment Test			|Passed|" << endl;
+	test_inOrder();
+	cout << "InOrder Test			|Passed|" << endl;
+	test_preOrder();
+	cout << "PreOrder Test			|Passed|" << endl;
+	test_postOrder();
+	cout << "PostOrder Test			|Passed|" << endl;
 
 	return 0;
 }

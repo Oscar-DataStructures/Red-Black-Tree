@@ -85,10 +85,10 @@ void Dictionary<KeyType>::insert(KeyType k)
 
 
 // ================================ Remove Method ==============================
-template <class KeyType>
-void Dictionary<KeyType>::remove(const KeyType& k)
-//Preconditions:  Tree must exist
-//Postcondition:  Inherits remove method from rbtree to remove value k from dict
-{
-  rbtree<KeyType>::remove(k);      //rbtree inheritance
-}
+// template <class KeyType>
+// void Dictionary<KeyType>::remove(const KeyType& k)
+// //Preconditions:  Tree must exist
+// //Postcondition:  Inherits remove method from rbtree to remove value k from dict
+// {
+//   rbtree<KeyType>::remove(k);      //rbtree inheritance
+// }
